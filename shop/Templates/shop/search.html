@@ -1,0 +1,32 @@
+{%extends 'shop/basic.html'%}
+{%block css%}
+<style>
+    .container{
+        margin-top: 10%;
+        display: flex;
+        flex-wrap: wrap;
+        gap:5%;
+    }
+</style>
+{%endblock%}
+{%  block title%}
+Search Result
+{%endblock%}
+{% block body %}
+<div class="container">
+{%if prods%}
+{% for product in prods %}
+<div class="card" style="width: 18rem;">
+  <img src="{{ product.image.url }}" class="card-img-top" alt="">
+  <div class="card-body">
+    <h5 class="card-title" id="namepr{{product.product_id}}">{{ product.product_name }}</h5>
+    <p class="card-text">{{ product.desc }}</p>
+    <h2 id="pricepr{{product.product_id}}">Price:{{ product.price }}</h2>
+  </div>
+</div>
+{% endfor %}
+{%else%}
+<h2>Sorry, No Item Found</h2>
+{% endif %}
+</div>
+{%endblock%}

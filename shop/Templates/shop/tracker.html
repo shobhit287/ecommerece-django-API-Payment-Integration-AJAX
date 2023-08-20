@@ -1,0 +1,107 @@
+{% extends 'shop/basic.html'%}
+{%load static%}
+{% block title %}Tracker{% endblock%}
+{%block css%}
+<style>
+    .container{
+        margin-top: 5%;
+    }
+</style>
+{%endblock%}
+
+{% block body %}
+<div class="container">
+<div class="col my-2">
+ <h2>Enter Your Order Id and Email To Track Your Order</h2>
+ <form class="row g-3" action="tracker" id="tracker_form" method="post">{% csrf_token %}
+
+    <div class="col-md-6">
+        <label for="inputname" class="form-label">Order Id:</label>
+        <input type="text" class="form-control" id="verify_orderid" name="verify_orderid" required>
+      </div>
+
+    <div class="col-md-6">
+      <label for="inputEmail4" class="form-label">Email:</label>
+      <input type="email" class="form-control" id="verify_email" name="verify_email" required>
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Track Order</button>
+      </div>
+    </form>
+    </div>
+
+    <div class="container">
+        <div class="col my-2">
+         <h2 >Tracking Details:</h2>
+         <div id="items-track">
+            
+        </div>
+        </div>
+        </div>
+
+        <div class="container">
+            <div class="col my-2">
+             <h2 >Your Order Details:</h2>
+             <div id="items-track-details">
+                
+            </div>
+            </div>
+            </div>
+</div>
+{%endblock%}
+
+{%block js%}
+<script>
+    $('#tracker_form').submit(function(event) {
+        event.preventDefault();
+        $('#items-track').empty();
+        $('#items-track-details').empty();
+        var formData = {
+            'verify_orderid': $('input[name=verify_orderid]').val(),
+            'verify_email': $('input[name=verify_email]').val(),
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+        };
+        $.ajax({
+            type: 'POST',
+            url: 'tracker',
+            data: formData,
+            encode: true
+        })
+        .done(function(data_order){
+            data=JSON.parse(data_order);
+            console.log(data);
+            updates = data[0];
+            console.log(updates);
+            if (updates && Array.isArray(updates) && updates.length > 0 && updates !== {}) {
+                for (i = 0; i < updates.length; i++) {
+                    let text = updates[i]['text'];
+                    let time = updates[i]['time'];
+                    let listItem = `<ul class="list-group"><li class="list-group-item d-flex justify-content-between align-items-center">${text}<span class="badge bg-primary rounded-pill">${time}</span></li></ul>`;
+                    $('#items-track').append(listItem);
+                }
+            } else {
+                $('#items-track').html(`<div class="alert alert-danger" role="alert">
+                    Sorry! There is no Order With This Id
+                </div>`);
+            }
+            cart=JSON.parse(data[1]);
+            console.log(cart);
+            let sum=0;
+            for (item in cart) {
+                let name = cart[item][1];
+                let qty = Number(cart[item][0]);
+                let price=Number(cart[item][2].slice(6));
+                sum=sum+(qty*price);
+                //let qty=
+                let listItem = `<ul class="list-group"><li class="list-group-item d-flex justify-content-between align-items-center">${name}<span style="font-weight:bold;">Price: ${price}*${qty}=${price*qty}</span></li></ul>`;
+                $('#items-track-details').append(listItem);
+            }
+            $('#items-track-details').append(`<h2>Total Bill:₹ ${sum}</h2>`);
+        });
+    });
+    
+    </script>
+    
+
+
+{%endblock%}

@@ -1,0 +1,28 @@
+.product_detail{
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 10%;
+   
+}
+.product_left{
+    display: flex;
+    flex-direction: column;
+}
+.product_left button{
+    margin-block: 5px;
+}
+.product_info{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    justify-content: center;
+    padding: 40px;
+}
+img{
+    opacity: 1;
+    width: 60%;
+    margin-left:18%;
+}

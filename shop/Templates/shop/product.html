@@ -1,0 +1,22 @@
+{%extends 'shop/basic.html'%}
+{%load static%}
+{%  block title%}{{product.product_name}}{% endblock%}
+{%block css%} <link rel="stylesheet" href="{%static 'shop/css/product.css' %}"> {%endblock%}
+
+{% block body %}
+<div class="product_detail">
+<div class="product_left">
+<img src="/media/{{product.image}}" >
+<button class="btn btn-primary " >Buy Now</button>
+<button type="button" class="btn btn-secondary ">Add To Cart</button>
+</div>
+<div class="product_info">
+<h3>{{product.product_name}}</h3>
+<p><span style="font-weight:bold;">Description: </span>{{product.desc}}</p>
+<h4>Price:{{product.price}}</h4>
+</div>
+</div>
+{%endblock%}
+{%block js%}
+
+{%endblock%}
